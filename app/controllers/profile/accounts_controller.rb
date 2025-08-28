@@ -5,7 +5,7 @@ module Profile
 
     # GET /accounts or /accounts.json
     def index
-      @accounts = Account.includes(:transactions).all
+      @accounts = current_user.accounts.includes(:transactions).all
     end
 
     # GET /accounts/1 or /accounts/1.json

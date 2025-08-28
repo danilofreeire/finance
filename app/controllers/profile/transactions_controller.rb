@@ -2,10 +2,10 @@ module Profile
 
   class TransactionsController < ProfileController
     before_action :set_transaction, only: %i[ show edit update destroy ]
-    before_action :set_account
     # GET /transactions or /transactions.json
     def index
-      @transactions = Transaction.all
+      
+      @transactions = @account.transactions.order(date: :desc)
     end
 
     # GET /transactions/1 or /transactions/1.json
@@ -61,9 +61,7 @@ module Profile
 
     private
 
-    def set_account
-      @account = current_user.accounts.friendly.find(params[:account_id])
-    end
+    
 
       # Use callbacks to share common setup or constraints between actions.
       def set_transaction
