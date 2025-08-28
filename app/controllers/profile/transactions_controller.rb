@@ -2,7 +2,7 @@ module Profile
 
   class TransactionsController < ProfileController
     before_action :set_transaction, only: %i[ show edit update destroy ]
-
+    before_action :set_account
     # GET /transactions or /transactions.json
     def index
       @transactions = Transaction.all
@@ -27,7 +27,7 @@ module Profile
 
       respond_to do |format|
         if @transaction.save
-          format.html { redirect_to @transaction, notice: "Transaction was successfully created." }
+          format.html { redirect_to account_transactions_path(@account), notice: "Transaction was successfully created." }
           format.json { render :show, status: :created, location: @transaction }
         else
           format.html { render :new, status: :unprocessable_entity }
@@ -40,7 +40,7 @@ module Profile
     def update
       respond_to do |format|
         if @transaction.update(transaction_params)
-          format.html { redirect_to @transaction, notice: "Transaction was successfully updated.", status: :see_other }
+          format.html { redirect_to account_transactions_path(@account), notice: "Transaction was successfully updated.", status: :see_other }
           format.json { render :show, status: :ok, location: @transaction }
         else
           format.html { render :edit, status: :unprocessable_entity }
@@ -54,12 +54,17 @@ module Profile
       @transaction.destroy!
 
       respond_to do |format|
-        format.html { redirect_to transactions_path, notice: "Transaction was successfully destroyed.", status: :see_other }
+        format.html { redirect_to account_transactions_path, notice: "Transaction was successfully destroyed.", status: :see_other }
         format.json { head :no_content }
       end
     end
 
     private
+
+    def set_account
+      @account = current_user.accounts.friendly.find(params[:account_id])
+    end
+
       # Use callbacks to share common setup or constraints between actions.
       def set_transaction
         @transaction = Transaction.find(params[:id])
@@ -67,7 +72,7 @@ module Profile
 
       # Only allow a list of trusted parameters through.
       def transaction_params
-        params.require(:transaction).permit(:date, :amount, :kind, :description, :account_ids)
+        params.require(:transaction).permit(:date, :amount, :kind, :description).merge(account: @account)
       end
   end
 end

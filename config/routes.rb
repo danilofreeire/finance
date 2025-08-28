@@ -7,8 +7,9 @@ Rails.application.routes.draw do
   scope module: 'profile' do
     get '/dashboard', to: 'dashboard#index', as: :dashboard
 
-    resources :accounts
-    resources :transactions
+    resources :accounts do 
+      resources :transactions
+    end
   end
   
 
