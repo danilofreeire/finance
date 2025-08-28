@@ -1,9 +1,10 @@
 class AccountsController < ApplicationController
   before_action :set_account, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!
 
   # GET /accounts or /accounts.json
   def index
-     @accounts = Account.all
+     @accounts = Account.includes(:transactions).all
   end
 
   # GET /accounts/1 or /accounts/1.json
@@ -60,11 +61,13 @@ class AccountsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_account
-      @account = Account.find(params[:id])
+      @account = Account.friendly.find(params[:id])
     end
+
+
 
     # Only allow a list of trusted parameters through.
     def account_params
-      params.require(:account).permit(:name, :kind, :opening_balance)
+      params.require(:account).permit(:name, :kind, :opening_balance).merge(user: current_user)
     end
 end
