@@ -1,0 +1,24 @@
+pt-BR:
+  activerecord:
+    models:
+      account: Conta
+      transaction: Transação
+    attributes:
+      account:
+        id: Identificador
+        name: Nome
+        kind: Tipo
+        opening_balance: Saldo inicial
+        created_at: Criado em
+        updated_at: Atualizado em
+        slug: Slug
+
+      transaction:
+        id: Identificador
+        date: Data
+        account_id: Identificador da Conta
+        amount: Valor
+        kind: Tipo
+        description: Descrição
+        created_at: Criado em
+        updated_at: Atualizado em
