@@ -1,9 +1,16 @@
 Rails.application.routes.draw do
+  get 'welcome/index'
+  get 'dashboard/index'
   devise_for :users
-  
-  resources :accounts do
+
+
+  scope module: 'profile' do
+    get '/dashboard', to: 'dashboard#index', as: :dashboard
+
+    resources :accounts
     resources :transactions
   end
+  
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -16,5 +23,5 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  root "welcome#index"
 end
