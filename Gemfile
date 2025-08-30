@@ -59,6 +59,9 @@ group :development, :test do
   gem "rspec"
   gem "rspec-rails", "~> 6.1.0"
   gem "shoulda-matchers", "~> 6.0"
+  gem "faker"
+  gem "tty-spinner"
+  gem "dotenv"
 end
 
 group :development do

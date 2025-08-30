@@ -21,3 +21,14 @@ pt-BR:
         description: Descrição
         created_at: Criado em
         updated_at: Atualizado em
+  enums:
+    account:
+      kind:
+        checking: Conta corrente
+        savings: Poupança
+        cash: Dinheiro
+        wallet: Carteira digital
+        credit_card: Cartão de crédito
+        investment: Investimentos
+        loan: Empréstimo
+        other: Outro

@@ -15,6 +15,6 @@ class ProfileController < ApplicationController
   end
 
   def set_accounts
-    @accounts = current_user.accounts.order(:name)
+    @accounts = current_user.accounts.order(:name) if current_user.present?
   end
 end
