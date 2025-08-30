@@ -6,7 +6,6 @@ module Transactions
       include Interactor
 
       def call
-
         tx   = context.transaction
         acc  = context.account
         amt  = tx.amount
@@ -18,7 +17,6 @@ module Transactions
         else
           context.fail!(error: "Tipo de transação inválido")
         end
-        
       rescue StandardError => e
         Rails.logger.error("Erro ao aumentar o saldo da conta: #{e.message}")
         context.fail!(error: e.message)
@@ -33,7 +31,6 @@ module Transactions
       def decrease_balance(account, amount)
         account.opening_balance -= amount
       end
-    
     end
   end
 end

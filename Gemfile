@@ -56,6 +56,9 @@ group :development, :test do
   gem "railroady"
   gem "rubocop-rails", require: false
   gem "rubocop-shopify", require: false
+  gem "rspec"
+  gem "rspec-rails", "~> 6.1.0"
+  gem "shoulda-matchers", "~> 6.0"
 end
 
 group :development do

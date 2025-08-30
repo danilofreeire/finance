@@ -26,14 +26,14 @@ module Profile
       @transaction = Transaction.new(transaction_params)
 
       ActiveRecord::Base.transaction do
-      # Calcula saldo previsto
+        # Calcula saldo previsto
         result = ::Transactions::Operation::Organizer.call(
           account: @account,
-          transaction: @transaction
+          transaction: @transaction,
         )
         unless result.success?
-            flash[:error] = result.error
-            raise ActiveRecord::Rollback
+          flash[:error] = result.error
+          raise ActiveRecord::Rollback
         end
 
         # Salva a transação primeiro

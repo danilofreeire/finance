@@ -3,10 +3,9 @@
 module Profile
   class AccountsController < ProfileController
     before_action :authenticate_user!
-    
+
     # GET /accounts or /accounts.json
     def index
-
     end
 
     # GET /accounts/1 or /accounts/1.json
@@ -61,8 +60,6 @@ module Profile
     end
 
     private
-
-  
 
     # Only allow a list of trusted parameters through.
     def account_params
