@@ -24,7 +24,7 @@
 
 <div>
   <%= form.label :kind, style: "display: block" %>
-  <%= form.text_field :kind %>
+  <%= form.select :kind, Transaction.kinds.keys.map { |k| [k.humanize, k] } %>
 </div>
 
 <div>

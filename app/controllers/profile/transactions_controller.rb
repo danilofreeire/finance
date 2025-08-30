@@ -24,11 +24,23 @@ module Profile
     # POST /transactions or /transactions.json
     def create
       @transaction = Transaction.new(transaction_params)
-      result = ::Transactions::Increase::Organizer.call(account: @account, amount: @transaction.amount)
-      if result.success?
-        @account.update(opening_balance: result.balance)
-      else
-        flash[:error] = result.error
+
+      ActiveRecord::Base.transaction do
+      # Calcula saldo previsto
+        result = ::Transactions::Operation::Organizer.call(
+          account: @account,
+          transaction: @transaction
+        )
+        unless result.success?
+            flash[:error] = result.error
+            raise ActiveRecord::Rollback
+        end
+
+        # Salva a transação primeiro
+        @transaction.save!
+
+        # Só então persiste o novo saldo
+        @account.update!(opening_balance: result.balance)
       end
 
       respond_to do |format|

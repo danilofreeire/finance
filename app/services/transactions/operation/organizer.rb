@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module Transactions
-  module Increase
+  module Operation
     class Organizer
       include Interactor::Organizer
 
-      organize(Increase)
+      organize(Operation)
     end
   end
 end
