@@ -1,18 +1,17 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
-  get 'welcome/index'
-  get 'dashboard/index'
+  get "welcome/index"
+  get "dashboard/index"
   devise_for :users
 
+  scope module: "profile" do
+    get "/dashboard", to: "dashboard#index", as: :dashboard
 
-  scope module: 'profile' do
-    get '/dashboard', to: 'dashboard#index', as: :dashboard
-
-    resources :accounts do 
+    resources :accounts do
       resources :transactions
-      
     end
   end
-  
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

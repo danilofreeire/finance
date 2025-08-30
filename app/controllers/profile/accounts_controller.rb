@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Profile
-  class AccountsController < ProfileController  
-    before_action :set_account, only: %i[ show edit update destroy ]
+  class AccountsController < ProfileController
+    before_action :set_account, only: [:show, :edit, :update, :destroy]
     before_action :authenticate_user!
 
     # GET /accounts or /accounts.json
@@ -27,11 +29,11 @@ module Profile
 
       respond_to do |format|
         if @account.save
-          format.html { redirect_to @account, notice: "Account was successfully created." }
-          format.json { render :show, status: :created, location: @account }
+          format.html { redirect_to(@account, notice: "Account was successfully created.") }
+          format.json { render(:show, status: :created, location: @account) }
         else
-          format.html { render :new, status: :unprocessable_entity }
-          format.json { render json: @account.errors, status: :unprocessable_entity }
+          format.html { render(:new, status: :unprocessable_entity) }
+          format.json { render(json: @account.errors, status: :unprocessable_entity) }
         end
       end
     end
@@ -40,11 +42,11 @@ module Profile
     def update
       respond_to do |format|
         if @account.update(account_params)
-          format.html { redirect_to @account, notice: "Account was successfully updated.", status: :see_other }
-          format.json { render :show, status: :ok, location: @account }
+          format.html { redirect_to(@account, notice: "Account was successfully updated.", status: :see_other) }
+          format.json { render(:show, status: :ok, location: @account) }
         else
-          format.html { render :edit, status: :unprocessable_entity }
-          format.json { render json: @account.errors, status: :unprocessable_entity }
+          format.html { render(:edit, status: :unprocessable_entity) }
+          format.json { render(json: @account.errors, status: :unprocessable_entity) }
         end
       end
     end
@@ -54,22 +56,21 @@ module Profile
       @account.destroy!
 
       respond_to do |format|
-        format.html { redirect_to accounts_path, notice: "Account was successfully destroyed.", status: :see_other }
-        format.json { head :no_content }
+        format.html { redirect_to(accounts_path, notice: "Account was successfully destroyed.", status: :see_other) }
+        format.json { head(:no_content) }
       end
     end
 
     private
-      # Use callbacks to share common setup or constraints between actions.
-      def set_account
-        @account = Account.friendly.find(params[:id])
-      end
 
+    # Use callbacks to share common setup or constraints between actions.
+    def set_account
+      @account = Account.friendly.find(params[:id])
+    end
 
-
-      # Only allow a list of trusted parameters through.
-      def account_params
-        params.require(:account).permit(:name, :kind, :opening_balance).merge(user: current_user)
-      end
+    # Only allow a list of trusted parameters through.
+    def account_params
+      params.require(:account).permit(:name, :kind, :opening_balance).merge(user: current_user)
+    end
   end
 end

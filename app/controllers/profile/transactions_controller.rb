@@ -1,10 +1,10 @@
-module Profile
+# frozen_string_literal: true
 
+module Profile
   class TransactionsController < ProfileController
-    before_action :set_transaction, only: %i[ show edit update destroy ]
+    before_action :set_transaction, only: [:show, :edit, :update, :destroy]
     # GET /transactions or /transactions.json
     def index
-      
       @transactions = @account.transactions.order(date: :desc)
     end
 
@@ -24,14 +24,20 @@ module Profile
     # POST /transactions or /transactions.json
     def create
       @transaction = Transaction.new(transaction_params)
+      result = ::Transactions::Increase::Organizer.call(account: @account, amount: @transaction.amount)
+      if result.success?
+        @account.update(opening_balance: result.balance)
+      else
+        flash[:error] = result.error
+      end
 
       respond_to do |format|
         if @transaction.save
-          format.html { redirect_to account_transactions_path(@account), notice: "Transaction was successfully created." }
-          format.json { render :show, status: :created, location: @transaction }
+          format.html { redirect_to(account_transactions_path(@account), notice: "Transaction was successfully created.") }
+          format.json { render(:show, status: :created, location: @transaction) }
         else
-          format.html { render :new, status: :unprocessable_entity }
-          format.json { render json: @transaction.errors, status: :unprocessable_entity }
+          format.html { render(:new, status: :unprocessable_entity) }
+          format.json { render(json: @transaction.errors, status: :unprocessable_entity) }
         end
       end
     end
@@ -40,11 +46,11 @@ module Profile
     def update
       respond_to do |format|
         if @transaction.update(transaction_params)
-          format.html { redirect_to account_transactions_path(@account), notice: "Transaction was successfully updated.", status: :see_other }
-          format.json { render :show, status: :ok, location: @transaction }
+          format.html { redirect_to(account_transactions_path(@account), notice: "Transaction was successfully updated.", status: :see_other) }
+          format.json { render(:show, status: :ok, location: @transaction) }
         else
-          format.html { render :edit, status: :unprocessable_entity }
-          format.json { render json: @transaction.errors, status: :unprocessable_entity }
+          format.html { render(:edit, status: :unprocessable_entity) }
+          format.json { render(json: @transaction.errors, status: :unprocessable_entity) }
         end
       end
     end
@@ -54,23 +60,21 @@ module Profile
       @transaction.destroy!
 
       respond_to do |format|
-        format.html { redirect_to account_transactions_path, notice: "Transaction was successfully destroyed.", status: :see_other }
-        format.json { head :no_content }
+        format.html { redirect_to(account_transactions_path, notice: "Transaction was successfully destroyed.", status: :see_other) }
+        format.json { head(:no_content) }
       end
     end
 
     private
 
-    
+    # Use callbacks to share common setup or constraints between actions.
+    def set_transaction
+      @transaction = Transaction.find(params[:id])
+    end
 
-      # Use callbacks to share common setup or constraints between actions.
-      def set_transaction
-        @transaction = Transaction.find(params[:id])
-      end
-
-      # Only allow a list of trusted parameters through.
-      def transaction_params
-        params.require(:transaction).permit(:date, :amount, :kind, :description).merge(account: @account)
-      end
+    # Only allow a list of trusted parameters through.
+    def transaction_params
+      params.require(:transaction).permit(:date, :amount, :kind, :description).merge(account: @account)
+    end
   end
 end
