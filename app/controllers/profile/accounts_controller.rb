@@ -2,12 +2,11 @@
 
 module Profile
   class AccountsController < ProfileController
-    before_action :set_account, only: [:show, :edit, :update, :destroy]
     before_action :authenticate_user!
-
+    
     # GET /accounts or /accounts.json
     def index
-      @accounts = current_user.accounts.includes(:transactions).all
+
     end
 
     # GET /accounts/1 or /accounts/1.json
@@ -63,10 +62,7 @@ module Profile
 
     private
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_account
-      @account = Account.friendly.find(params[:id])
-    end
+  
 
     # Only allow a list of trusted parameters through.
     def account_params

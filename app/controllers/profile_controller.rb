@@ -10,7 +10,8 @@ class ProfileController < ApplicationController
   private
 
   def set_account
-    @account = current_user.accounts.friendly.find(params[:account_id]) if params[:account_id].present?
+    account_id = params[:account_id] || params[:id]
+    @account = current_user.accounts.friendly.find(account_id) if account_id.present?
   end
 
   def set_accounts
