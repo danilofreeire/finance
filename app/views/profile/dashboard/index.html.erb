@@ -1,3 +1,50 @@
-<!-- app/views/profile/dashboard/index.html.erb -->
-<p>Receitas: <%= number_to_currency(@total_income) %></p>
-<p>Despesas: <%= number_to_currency(@total_expense) %></p>
+<%# Resumo do dia %>
+<h2>Hoje (<%= l(Time.zone.today, format: :long) %>)</h2>
+
+<ul>
+  <li><strong>Saldo até ontem:</strong>
+    <%= number_to_currency(@balance_until_yesterday_total) %></li>
+  <li><strong>Entradas de hoje:</strong>
+    <%= number_to_currency(@total_income_today) %></li>
+  <li><strong>Saídas de hoje:</strong>
+    <%= number_to_currency(@total_expense_today) %></li>
+  <li><strong>Saldo total hoje:</strong>
+    <%= number_to_currency(@total_balance_today) %></li>
+</ul>
+
+<hr>
+
+<%# Detalhe por conta %>
+<h3>Por conta</h3>
+
+<% if @accounts.blank? %>
+<p>Você ainda não tem contas.</p>
+<% else %>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Conta</th>
+      <th>Saldo até ontem</th>
+      <th>Entradas hoje</th>
+      <th>Saídas hoje</th>
+      <th>Saldo hoje</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @accounts.each do |account| %>
+    <% data = (@balances_by_account_id[account.id] || {}).with_indifferent_access %>
+    <tr>
+      <td><%= account.name %></td>
+      <td><%= number_to_currency(data[:balance_until_yesterday] || 0) %></td>
+      <td><%= number_to_currency(data[:income_today] || 0) %></td>
+      <td><%= number_to_currency(data[:expense_today] || 0) %></td>
+      <td><%= number_to_currency(data[:balance_today] || 0) %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
+
+<% if flash[:error].present? %>
+<div class="alert alert-danger"><%= flash[:error] %></div>
+<% end %>

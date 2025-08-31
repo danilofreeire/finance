@@ -2,8 +2,6 @@
 
 module Profile
   class AccountsController < ProfileController
-    before_action :authenticate_user!
-
     # GET /accounts or /accounts.json
     def index
     end

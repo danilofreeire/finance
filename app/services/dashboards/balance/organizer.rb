@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Dashboards
-  module Sum
+  module Balance
     class Organizer
       include Interactor::Organizer
 
