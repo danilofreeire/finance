@@ -57,7 +57,7 @@ group :development, :test do
   gem "rubocop-rails", require: false
   gem "rubocop-shopify", require: false
   gem "rspec"
-  gem "rspec-rails", "~> 6.1.0"
+  gem "rspec-rails", "~> 7.1.1"
   gem "shoulda-matchers", "~> 6.0"
   gem "faker"
   gem "tty-spinner"
